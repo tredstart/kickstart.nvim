@@ -314,7 +314,13 @@ require('lazy').setup({
     opts = {
       library = {
         -- Load luvit types when the `vim.uv` word is found
-        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        {
+          path = '${3rd}/luv/library',
+          words = { 'vim%.uv' },
+        },
+        {
+          path = '${3rd}/love2d/library',
+        },
       },
     },
   },
@@ -330,7 +336,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',    opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -772,6 +778,16 @@ vim.opt.shiftwidth = 4
 vim.opt.smarttab = true
 
 
+local gdproject = io.open(vim.fn.getcwd() .. '/project.godot', 'r')
+if gdproject then
+  io.close(gdproject)
+  vim.fn.serverstart './godothost'
+end
+-- DO NOT TOUCH YOU BLITHERING IDIOT
+vim.keymap.set("x", "<leader>p", "\"_dP")
+vim.o.guicursor = ""
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+
 vim.keymap.set("n", "<leader>ff", "<cmd>Format<CR>")
 vim.keymap.set("n", "<leader>bl", function()
   vim.cmd [[set background=light]]
@@ -781,13 +797,6 @@ require("oil").setup()
 vim.keymap.set('n', '<leader>pv', "<cmd>Oil<CR>")
 local batman = require('batman')
 batman.setup()
-local gdproject = io.open(vim.fn.getcwd()..'/project.godot', 'r')
-if gdproject then
-    io.close(gdproject)
-    vim.fn.serverstart './godothost'
-end
--- DO NOT TOUCH YOU BLITHERING IDIOT
-vim.keymap.set("x", "<leader>p", "\"_dP")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
