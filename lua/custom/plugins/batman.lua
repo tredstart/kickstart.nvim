@@ -1,0 +1,3 @@
+return {
+    'tredstart/batman.nvim'
+}

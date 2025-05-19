@@ -11,9 +11,10 @@ vim.g.have_nerd_font = true
 
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.keymap.set('n', '<leader>w', vim.cmd.w)
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 -- You can also add relative line numbers, for help with jumping.
+vim.keymap.set('n', '<leader>fs', vim.cmd.w)
+vim.keymap.set('n', '<leader>lr', "<cmd>!love .<CR><CR>")
 
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
@@ -533,6 +534,19 @@ require('lazy').setup({
           -- capabilities = {},
           settings = {
             Lua = {
+              runtime = { version = 'LuaJIT' },
+              workspace = {
+                checkThirdParty = false,
+                -- Tells lua_ls where to find all the Lua files that you have loaded
+                -- for your neovim configuration.
+                library = {
+                  '${3rd}/luv/library',
+                  unpack(vim.api.nvim_get_runtime_file('', true)),
+                  '${3rd}/love2d/library',
+                },
+                -- If lua_ls is really slow on your computer, you can try this instead:
+                -- library = { vim.env.VIMRUNTIME },
+              },
               completion = {
                 callSnippet = 'Replace',
               },
@@ -758,7 +772,7 @@ vim.opt.shiftwidth = 4
 vim.opt.smarttab = true
 
 
-vim.keymap.set("n", "<leader>f", "<cmd>Format<CR>")
+vim.keymap.set("n", "<leader>ff", "<cmd>Format<CR>")
 vim.keymap.set("n", "<leader>bl", function()
   vim.cmd [[set background=light]]
   vim.cmd [[colorscheme gruvbox]]
@@ -767,6 +781,11 @@ require("oil").setup()
 vim.keymap.set('n', '<leader>pv', "<cmd>Oil<CR>")
 local batman = require('batman')
 batman.setup()
+local gdproject = io.open(vim.fn.getcwd()..'/project.godot', 'r')
+if gdproject then
+    io.close(gdproject)
+    vim.fn.serverstart './godothost'
+end
 -- DO NOT TOUCH YOU BLITHERING IDIOT
 vim.keymap.set("x", "<leader>p", "\"_dP")
 
